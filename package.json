@@ -1,0 +1,7 @@
+{
+  "name": "hybrid-lab",
+  "version": "1.0.0",
+  "description": "Animal × Dinosaur hybrid creator powered by Claude AI",
+  "private": true,
+  "type": "module"
+}

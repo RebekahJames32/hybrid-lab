@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HYBRID LAB — Animal × Dinosaur Fusion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Bungee+Shade&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-deep: #0a0d1f;
+    --bg-mid: #131836;
+    --glow-cyan: #00f0ff;
+    --glow-magenta: #ff2bd6;
+    --glow-acid: #aeff00;
+    --glow-amber: #ffb800;
+    --ink: #f0f4ff;
+    --ink-dim: #8a9bc4;
+    --panel: rgba(20, 26, 60, 0.6);
+    --border: rgba(0, 240, 255, 0.25);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--bg-deep);
+    color: var(--ink);
+    font-family: 'Space Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(0, 240, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 240, 255, 0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+    z-index: 0; pointer-events: none;
+    animation: gridShift 20s linear infinite;
+  }
+
+  body::after {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 10%, rgba(255, 43, 214, 0.15), transparent 50%),
+      radial-gradient(ellipse at 80% 90%, rgba(0, 240, 255, 0.18), transparent 50%),
+      radial-gradient(ellipse at 50% 50%, rgba(174, 255, 0, 0.05), transparent 70%);
+    z-index: 0; pointer-events: none;
+  }
+
+  @keyframes gridShift {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(40px, 40px); }
+  }
+
+  .container {
+    position: relative; z-index: 1;
+    max-width: 1200px; margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  header { text-align: center; margin-bottom: 56px; padding-top: 24px; }
+
+  .logo-mark {
+    display: inline-flex; align-items: center; gap: 12px;
+    padding: 8px 18px;
+    border: 2px solid var(--glow-acid);
+    border-radius: 999px;
+    font-size: 12px; letter-spacing: 0.3em;
+    color: var(--glow-acid); text-transform: uppercase;
+    margin-bottom: 24px;
+    box-shadow: 0 0 20px rgba(174, 255, 0, 0.3);
+    animation: pulse-acid 2s ease-in-out infinite;
+  }
+
+  .logo-mark::before {
+    content: ''; width: 8px; height: 8px;
+    background: var(--glow-acid); border-radius: 50%;
+    box-shadow: 0 0 12px var(--glow-acid);
+    animation: blink 1s steps(2) infinite;
+  }
+
+  @keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0.3; } }
+  @keyframes pulse-acid {
+    0%, 100% { box-shadow: 0 0 20px rgba(174, 255, 0, 0.3); }
+    50% { box-shadow: 0 0 30px rgba(174, 255, 0, 0.6); }
+  }
+
+  h1 {
+    font-family: 'Bungee Shade', sans-serif;
+    font-size: clamp(48px, 9vw, 110px);
+    line-height: 0.95; letter-spacing: -0.02em;
+    color: var(--ink);
+    text-shadow: 0 0 30px rgba(0, 240, 255, 0.5), 0 0 60px rgba(255, 43, 214, 0.3);
+  }
+
+  h1 .accent { color: var(--glow-magenta); text-shadow: 0 0 40px var(--glow-magenta); }
+
+  .tagline {
+    margin-top: 16px; font-size: 14px;
+    letter-spacing: 0.2em; color: var(--ink-dim);
+    text-transform: uppercase;
+  }
+
+  .tagline span { color: var(--glow-cyan); }
+
+  .step-header { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; margin-top: 48px; }
+
+  .step-number {
+    font-family: 'Bungee', sans-serif;
+    font-size: 32px; color: var(--bg-deep);
+    background: var(--glow-cyan);
+    width: 56px; height: 56px;
+    display: grid; place-items: center;
+    border-radius: 8px;
+    box-shadow: 0 0 24px rgba(0, 240, 255, 0.6);
+    transform: rotate(-3deg);
+  }
+
+  .step-number.magenta { background: var(--glow-magenta); box-shadow: 0 0 24px rgba(255, 43, 214, 0.6); transform: rotate(3deg); }
+  .step-number.acid { background: var(--glow-acid); box-shadow: 0 0 24px rgba(174, 255, 0, 0.6); transform: rotate(-2deg); }
+
+  .step-title { font-family: 'Bungee', sans-serif; font-size: clamp(22px, 3.5vw, 32px); letter-spacing: 0.02em; }
+  .step-subtitle { font-size: 13px; color: var(--ink-dim); margin-top: 2px; letter-spacing: 0.15em; text-transform: uppercase; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 14px; }
+
+  .card {
+    background: var(--panel);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 12px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(8px);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, transparent, rgba(0, 240, 255, 0.1));
+    opacity: 0; transition: opacity 0.2s;
+  }
+
+  .card:hover { border-color: var(--glow-cyan); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0, 240, 255, 0.2); }
+  .card:hover::before { opacity: 1; }
+
+  .card.selected {
+    border-color: var(--glow-cyan);
+    background: rgba(0, 240, 255, 0.12);
+    box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.2), 0 0 30px rgba(0, 240, 255, 0.4);
+    transform: translateY(-3px);
+  }
+
+  #dino-grid .card.selected {
+    border-color: var(--glow-magenta);
+    background: rgba(255, 43, 214, 0.12);
+    box-shadow: 0 0 0 3px rgba(255, 43, 214, 0.2), 0 0 30px rgba(255, 43, 214, 0.4);
+  }
+
+  #dino-grid .card:hover { border-color: var(--glow-magenta); box-shadow: 0 8px 30px rgba(255, 43, 214, 0.2); }
+
+  .card-icon { font-size: 44px; line-height: 1; margin-bottom: 8px; display: block; filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5)); }
+  .card-name { font-family: 'Bungee', sans-serif; font-size: 13px; letter-spacing: 0.05em; text-transform: uppercase; }
+
+  /* Info panel showing details of selected creature */
+  .info-panel {
+    margin-top: 20px;
+    background: linear-gradient(135deg, rgba(20, 26, 60, 0.6), rgba(0, 240, 255, 0.04));
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--glow-cyan);
+    border-radius: 12px;
+    padding: 24px 28px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 24px;
+    align-items: start;
+    animation: slideIn 0.4s ease-out;
+  }
+
+  @keyframes slideIn {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  #dino-info {
+    border-left-color: var(--glow-magenta);
+    background: linear-gradient(135deg, rgba(20, 26, 60, 0.6), rgba(255, 43, 214, 0.04));
+  }
+
+  .info-panel-icon {
+    font-size: 64px; line-height: 1;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+  }
+
+  .info-panel-name {
+    font-family: 'Bungee', sans-serif;
+    font-size: 24px; letter-spacing: 0.02em;
+    margin-bottom: 6px;
+  }
+
+  .info-panel-desc {
+    font-size: 14px; line-height: 1.6;
+    color: var(--ink); margin-bottom: 16px;
+  }
+
+  .info-panel-traits-title {
+    font-size: 11px; letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--glow-cyan);
+    margin-bottom: 8px;
+  }
+
+  #dino-info .info-panel-traits-title { color: var(--glow-magenta); }
+
+  .info-panel-traits {
+    list-style: none;
+    display: grid; gap: 4px;
+    margin-bottom: 16px;
+  }
+
+  .info-panel-trait {
+    font-size: 13px; color: var(--ink-dim);
+    padding-left: 18px; position: relative;
+    line-height: 1.5;
+  }
+
+  .info-panel-trait::before {
+    content: '◆'; position: absolute;
+    left: 0; top: 0;
+    color: var(--glow-cyan);
+    font-size: 10px;
+  }
+
+  #dino-info .info-panel-trait::before { color: var(--glow-magenta); }
+
+  .info-panel-meta {
+    font-size: 11px; letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--glow-cyan);
+  }
+
+  #dino-info .info-panel-meta { color: var(--glow-magenta); }
+
+  .info-panel-meta-label {
+    color: var(--ink-dim); margin-right: 6px;
+  }
+
+
+  .info-panel-facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px 20px;
+    margin-bottom: 14px;
+  }
+  .info-panel-fact { display: flex; flex-direction: column; gap: 2px; }
+  .info-panel-fact-label {
+    font-size: 10px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--ink-dim);
+  }
+  .info-panel-fact-value {
+    font-size: 13px; color: var(--ink); font-weight: bold;
+  }
+  #dino-info .info-panel-fact-value { color: var(--glow-magenta); }
+  .info-panel-funfact {
+    margin-top: 12px;
+    padding: 10px 14px;
+    background: rgba(174, 255, 0, 0.06);
+    border-left: 3px solid var(--glow-acid);
+    border-radius: 6px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink);
+  }
+  .info-panel-funfact-label {
+    font-family: 'Bungee', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--glow-acid);
+    margin-right: 6px;
+  }
+
+  .fuse-zone { margin-top: 64px; text-align: center; position: relative; }
+
+  .fuse-button {
+    font-family: 'Bungee', sans-serif;
+    font-size: clamp(28px, 5vw, 48px);
+    letter-spacing: 0.05em;
+    background: linear-gradient(135deg, var(--glow-acid), var(--glow-cyan));
+    color: var(--bg-deep);
+    border: none;
+    padding: 24px 64px;
+    border-radius: 16px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s;
+    box-shadow: 0 0 40px rgba(174, 255, 0, 0.4), 0 8px 30px rgba(0, 0, 0, 0.4);
+    text-transform: uppercase;
+  }
+
+  .fuse-button:disabled { background: var(--bg-mid); color: var(--ink-dim); cursor: not-allowed; box-shadow: none; border: 2px dashed var(--border); }
+  .fuse-button:not(:disabled):hover { transform: scale(1.05) rotate(-1deg); box-shadow: 0 0 60px rgba(174, 255, 0, 0.6), 0 12px 40px rgba(0, 0, 0, 0.5); }
+  .fuse-button:not(:disabled):active { transform: scale(0.98); }
+
+  .fuse-status { margin-top: 16px; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-dim); min-height: 20px; }
+  .fuse-status .ready { color: var(--glow-acid); }
+
+  .result-zone { margin-top: 64px; min-height: 0; }
+
+  .result-card {
+    background: linear-gradient(135deg, rgba(20, 26, 60, 0.9), rgba(40, 20, 70, 0.9));
+    border: 2px solid var(--glow-magenta);
+    border-radius: 20px;
+    padding: 48px 40px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 60px rgba(255, 43, 214, 0.3), inset 0 0 60px rgba(0, 240, 255, 0.08);
+    animation: resultReveal 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes resultReveal {
+    0% { opacity: 0; transform: translateY(30px) scale(0.95); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .result-card::before {
+    content: ''; position: absolute;
+    top: -50%; right: -20%;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(0, 240, 255, 0.2), transparent 60%);
+    pointer-events: none;
+  }
+
+  .result-card::after {
+    content: ''; position: absolute;
+    bottom: -50%; left: -20%;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(255, 43, 214, 0.2), transparent 60%);
+    pointer-events: none;
+  }
+
+  .result-label { font-size: 12px; letter-spacing: 0.4em; color: var(--glow-cyan); text-transform: uppercase; margin-bottom: 12px; position: relative; }
+
+  .result-name {
+    font-family: 'Bungee Shade', sans-serif;
+    font-size: clamp(40px, 7vw, 80px);
+    line-height: 1; margin-bottom: 12px;
+    color: var(--ink);
+    text-shadow: 0 0 30px var(--glow-magenta), 0 0 60px rgba(0, 240, 255, 0.4);
+    position: relative;
+  }
+
+  .result-scientific {
+    font-style: italic;
+    font-size: 16px;
+    color: var(--glow-cyan);
+    margin-bottom: 24px;
+    letter-spacing: 0.05em;
+    position: relative;
+  }
+
+  .result-parents {
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+    margin-bottom: 28px; padding-bottom: 28px;
+    border-bottom: 1px dashed var(--border);
+    position: relative;
+  }
+
+  .parent-chip {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    border: 1px solid var(--border);
+  }
+
+  .parent-chip .icon { font-size: 20px; }
+  .parents-plus { font-family: 'Bungee', sans-serif; font-size: 24px; color: var(--glow-acid); }
+
+  .result-description { font-size: 17px; line-height: 1.7; color: var(--ink); margin-bottom: 28px; position: relative; }
+
+  /* Stat row */
+  .result-stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 20px;
+    margin: 0 0 28px;
+    padding: 20px 24px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 12px;
+    border: 1px dashed var(--border);
+    position: relative;
+  }
+
+  .stat { display: flex; flex-direction: column; gap: 4px; }
+
+  .stat-label {
+    font-size: 10px; letter-spacing: 0.25em;
+    text-transform: uppercase; color: var(--ink-dim);
+  }
+
+  .stat-value {
+    font-family: 'Bungee', sans-serif;
+    font-size: 14px; letter-spacing: 0.02em;
+    color: var(--glow-acid);
+    line-height: 1.3;
+  }
+
+  /* Generic result section */
+  .result-section { margin-bottom: 24px; position: relative; }
+
+  .result-section-title {
+    font-family: 'Bungee', sans-serif;
+    font-size: 14px; letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .result-section-title.cyan { color: var(--glow-cyan); }
+  .result-section-title.magenta { color: var(--glow-magenta); }
+  .result-section-title.acid { color: var(--glow-acid); }
+  .result-section-title.amber { color: var(--glow-amber); }
+
+  .result-section-body {
+    font-size: 15px; line-height: 1.6; color: var(--ink);
+  }
+
+  .traits-list { list-style: none; display: grid; gap: 12px; position: relative; }
+
+  .trait {
+    background: rgba(0, 0, 0, 0.4);
+    padding: 16px 20px;
+    border-radius: 10px;
+    border-left: 4px solid var(--glow-acid);
+    font-size: 15px; line-height: 1.5;
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+
+  .trait-icon { font-size: 22px; flex-shrink: 0; }
+
+  .weakness-box {
+    background: rgba(255, 184, 0, 0.08);
+    border-left: 4px solid var(--glow-amber);
+    padding: 16px 20px;
+    border-radius: 8px;
+    font-size: 15px; line-height: 1.6;
+  }
+
+  .lore-box {
+    background: rgba(0, 240, 255, 0.05);
+    border-left: 4px solid var(--glow-cyan);
+    padding: 16px 20px;
+    border-radius: 8px;
+    font-style: italic;
+    font-size: 15px; line-height: 1.6;
+    color: var(--ink);
+  }
+
+  .reset-btn {
+    margin-top: 32px;
+    background: transparent;
+    border: 2px solid var(--ink-dim);
+    color: var(--ink-dim);
+    padding: 12px 28px;
+    border-radius: 8px;
+    font-family: 'Bungee', sans-serif;
+    font-size: 14px; letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    position: relative;
+  }
+
+  .reset-btn:hover { border-color: var(--glow-cyan); color: var(--glow-cyan); }
+
+  .loading { text-align: center; padding: 60px 20px; animation: resultReveal 0.4s ease-out; }
+
+  .loading-bolt {
+    font-size: 80px; display: inline-block;
+    animation: bolt 0.6s ease-in-out infinite alternate;
+    filter: drop-shadow(0 0 20px var(--glow-cyan));
+  }
+
+  @keyframes bolt {
+    0% { transform: rotate(-10deg) scale(1); filter: drop-shadow(0 0 20px var(--glow-cyan)); }
+    100% { transform: rotate(10deg) scale(1.15); filter: drop-shadow(0 0 30px var(--glow-magenta)); }
+  }
+
+  .loading-text {
+    font-family: 'Bungee', sans-serif;
+    font-size: 20px; margin-top: 24px;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    background: linear-gradient(90deg, var(--glow-cyan), var(--glow-magenta), var(--glow-acid), var(--glow-cyan));
+    background-size: 300% 100%;
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 2s linear infinite;
+  }
+
+  @keyframes shimmer { 0% { background-position: 0% 50%; } 100% { background-position: 300% 50%; } }
+  .loading-substep { font-size: 12px; margin-top: 12px; color: var(--ink-dim); letter-spacing: 0.3em; text-transform: uppercase; }
+
+  .corner-mark { position: absolute; width: 24px; height: 24px; border: 2px solid var(--glow-cyan); pointer-events: none; }
+  .corner-mark.tl { top: 12px; left: 12px; border-right: none; border-bottom: none; }
+  .corner-mark.tr { top: 12px; right: 12px; border-left: none; border-bottom: none; }
+  .corner-mark.bl { bottom: 12px; left: 12px; border-right: none; border-top: none; }
+  .corner-mark.br { bottom: 12px; right: 12px; border-left: none; border-top: none; }
+
+  footer { text-align: center; margin-top: 80px; color: var(--ink-dim); font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; }
+
+  @media (max-width: 600px) {
+    .grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; }
+    .card { padding: 16px 8px; }
+    .card-icon { font-size: 36px; }
+    .card-name { font-size: 11px; }
+    .result-card { padding: 32px 24px; }
+    .step-number { width: 44px; height: 44px; font-size: 24px; }
+    .info-panel { grid-template-columns: 1fr; gap: 12px; padding: 20px; }
+    .info-panel-icon { font-size: 56px; }
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo-mark">CRYPTOZOOLOGY DIVISION · LAB 7</div>
+      <h1>HYBRID<br><span class="accent">LAB</span></h1>
+      <p class="tagline">Animal <span>×</span> Dinosaur · Genetic Fusion Engine</p>
+    </header>
+
+    <section>
+      <div class="step-header">
+        <div class="step-number">1</div>
+        <div>
+          <div class="step-title">Choose Your Animal</div>
+          <div class="step-subtitle">// Select base genetic material</div>
+        </div>
+      </div>
+      <div class="grid" id="animal-grid"></div>
+      <div class="info-panel" id="animal-info" hidden></div>
+    </section>
+
+    <section>
+      <div class="step-header">
+        <div class="step-number magenta">2</div>
+        <div>
+          <div class="step-title">Choose Your Dinosaur</div>
+          <div class="step-subtitle">// Prehistoric DNA donor</div>
+        </div>
+      </div>
+      <div class="grid" id="dino-grid"></div>
+      <div class="info-panel" id="dino-info" hidden></div>
+    </section>
+
+    <section>
+      <div class="step-header">
+        <div class="step-number acid">3</div>
+        <div>
+          <div class="step-title">Activate The Fusion</div>
+          <div class="step-subtitle">// Engage chromosome reactor</div>
+        </div>
+      </div>
+      <div class="fuse-zone">
+        <button class="fuse-button" id="fuse-btn" disabled>⚡ Create Hybrid ⚡</button>
+        <div class="fuse-status" id="fuse-status">Pick one animal and one dinosaur to begin</div>
+      </div>
+    </section>
+
+    <section class="result-zone" id="result-zone"></section>
+
+    <footer>
+      Built in Lab 7 · Powered by mysterious science
+    </footer>
+  </div>
+
+<script>
+  // ========== RICH CREATURE DATA ==========
+  // Each creature has detailed traits the AI uses to generate richer hybrids,
+  // and that we display when the user makes a selection.
+  const ANIMALS = [
+    { name: 'Wolf', icon: '🐺',
+      description: 'Apex pack hunters with extraordinary endurance and intelligence.',
+      traits: ['Coordinated pack hunting', 'Smell 100× sharper than human', 'Long-distance endurance running', 'Crushing bite force'],
+      habitat: 'Forests, tundra, and mountain ranges',
+      length_ft: 5, weight_lbs: 80, diet: 'carnivore' },
+    { name: 'Eagle', icon: '🦅',
+      description: 'Master aerial hunters with vision capable of spotting prey from a mile away.',
+      traits: ['Vision 8× sharper than human', 'Talon grip force around 400 PSI', 'Wingspan up to 7 feet', 'Dives at 100+ mph'],
+      habitat: 'Mountains, coasts, and open forests',
+      length_ft: 3, weight_lbs: 10, diet: 'carnivore' },
+    { name: 'Tiger', icon: '🐅',
+      description: 'The largest of all wild cats — solitary, stealthy, and immensely powerful.',
+      traits: ['Stripes are unique like fingerprints', 'Can leap 30 feet horizontally', 'Excellent night vision', 'Powerful crushing bite'],
+      habitat: 'Asian jungles, mangrove swamps, and grasslands',
+      length_ft: 10, weight_lbs: 500, diet: 'carnivore' },
+    { name: 'Shark', icon: '🦈',
+      description: 'Ancient ocean predators that have prowled the seas for over 400 million years.',
+      traits: ['Senses electric fields of prey', 'Constantly grows replacement teeth', 'Detects blood from a quarter mile away', 'Some species never stop swimming'],
+      habitat: 'All ocean environments worldwide',
+      length_ft: 15, weight_lbs: 1200, diet: 'carnivore' },
+    { name: 'Octopus', icon: '🐙',
+      description: 'Highly intelligent invertebrates with eight independently-thinking arms.',
+      traits: ['Three hearts and blue blood', 'Instant color and texture camouflage', 'Each arm has its own neurons', 'Squeezes through any gap larger than its beak'],
+      habitat: 'Ocean floors, reefs, and tidal pools',
+      length_ft: 16, weight_lbs: 25, diet: 'carnivore' },
+    { name: 'Snake', icon: '🐍',
+      description: 'Limbless predators that smell with their tongues and swallow prey whole.',
+      traits: ['Detects body heat through pit organs', 'Unhinges jaw to swallow large prey', 'Some inject venom in milliseconds', 'Climbs, swims, and burrows'],
+      habitat: 'Almost every environment except polar regions',
+      length_ft: 15, weight_lbs: 150, diet: 'carnivore' },
+    { name: 'Elephant', icon: '🐘',
+      description: 'Earth\'s largest land animal — incredibly intelligent and emotionally complex.',
+      traits: ['Trunk has over 40,000 muscles', 'Communicates over miles via low-frequency rumbles', 'Excellent long-term memory', 'Tusks can weigh hundreds of pounds'],
+      habitat: 'African savannas and Asian forests',
+      length_ft: 20, weight_lbs: 12000, diet: 'herbivore' },
+    { name: 'Lion', icon: '🦁',
+      description: 'The only truly social big cat, hunting in coordinated prides.',
+      traits: ['Roar audible from 5 miles away', 'Females do most of the hunting', 'Powerful neck muscles for taking down large prey', 'Mane signals strength to rivals'],
+      habitat: 'African grasslands and dry savannas',
+      length_ft: 8, weight_lbs: 420, diet: 'carnivore' },
+    { name: 'Bear', icon: '🐻',
+      description: 'Massive omnivores combining brute strength with surprising speed.',
+      traits: ['Sprints 35 mph despite huge size', 'Hibernates for months without eating', 'Powerful claws for digging and climbing', 'Smell 7× better than a bloodhound'],
+      habitat: 'Forests, mountains, and arctic tundra',
+      length_ft: 8, weight_lbs: 900, diet: 'omnivore' },
+    { name: 'Gorilla', icon: '🦍',
+      description: 'Gentle giants with the strength of ten humans and remarkable intelligence.',
+      traits: ['Can lift 1,800+ pounds', 'Uses tools and recognizes itself in mirrors', 'Communicates via 25+ vocalizations', 'Lives in close-knit family groups'],
+      habitat: 'African rainforests and bamboo forests',
+      length_ft: 6, weight_lbs: 400, diet: 'herbivore' },
+    { name: 'Crocodile', icon: '🐊',
+      description: 'Ancient reptiles essentially unchanged for 200 million years.',
+      traits: ['Bite force of 3,700 PSI — the strongest measured', 'Holds breath underwater for an hour', 'Signature death-roll spinning attack', 'Heart shunts blood to digest large meals'],
+      habitat: 'Tropical rivers, swamps, and estuaries',
+      length_ft: 17, weight_lbs: 1000, diet: 'carnivore' },
+    { name: 'Scorpion', icon: '🦂',
+      description: 'Armored arachnids that glow under UV light and have prowled Earth for 430 million years.',
+      traits: ['Pincers crush prey instantly', 'Tail stinger injects neurotoxic venom', 'Glows blue-green under UV light', 'Can survive a year without food'],
+      habitat: 'Deserts, forests, and dark caves',
+      length_ft: 0.5, weight_lbs: 1, diet: 'carnivore' },
+    { name: 'Owl', icon: '🦉',
+      description: 'Silent night-flying hunters with 270-degree neck rotation.',
+      traits: ['Specially fringed feathers for silent flight', 'Hears prey moving under snow', 'Rotates head 270 degrees', 'Sees in near-total darkness'],
+      habitat: 'Forests, deserts, mountains, and tundra',
+      length_ft: 2, weight_lbs: 4, diet: 'carnivore' },
+    { name: 'Cheetah', icon: '🐆',
+      description: 'The fastest land animal, built entirely for explosive speed.',
+      traits: ['Accelerates 0–60 mph in three seconds', 'Top speed near 70 mph', 'Non-retractable claws act like cleats', 'Tail acts as a rudder while turning'],
+      habitat: 'African grasslands and semi-arid plains',
+      length_ft: 7, weight_lbs: 120, diet: 'carnivore' },
+    { name: 'Whale', icon: '🐋',
+      description: 'The largest animals to ever exist, with songs that travel hundreds of miles.',
+      traits: ['Heart can weigh as much as a car', 'Communicates across oceans via low frequencies', 'Holds breath for 90+ minutes', 'Some species live over 200 years'],
+      habitat: 'All oceans, from polar to tropical waters',
+      length_ft: 80, weight_lbs: 300000, diet: 'carnivore' },
+    { name: 'Hawk', icon: '🪶',
+      description: 'Fierce daytime hunters with telescopic vision and rapid pursuit speed.',
+      traits: ['Detects movement from a mile away', 'Stoops at 150+ mph', 'Talons pierce thick fur', 'Sees in the ultraviolet spectrum'],
+      habitat: 'Open country, forests, and cliffs',
+      length_ft: 2, weight_lbs: 3, diet: 'carnivore' }
+  ];
+
+  const DINOS = [
+    { name: 'T-Rex', icon: '🦖',
+      description: 'The Tyrant Lizard King — a 40-foot apex predator of the late Cretaceous with the strongest bite of any land animal that ever lived.',
+      traits: ['Bite force around 8,000 PSI — bone-crushing', 'Vision 13× sharper than human, with binocular depth perception', 'Tiny but powerfully muscled arms could lift 400 lbs', 'Could run 12–17 mph despite weighing 9 tons'],
+      period: 'Late Cretaceous (68–66 million years ago)',
+      length: '40 ft (12 m)',
+      height: '12 ft at the hip',
+      weight: '9 tons (18,000 lbs)',
+      diet: 'Carnivore — ate Triceratops, Edmontosaurus, and possibly carrion',
+      fun_fact: 'Brain twice the size of any other carnivorous dinosaur — and grew the size of a school bus in just 18 years.' },
+    { name: 'Velociraptor', icon: '🦎',
+      description: 'Turkey-sized, fully feathered pack hunter with a retractable sickle claw on each foot — far smaller and smarter than the movies suggest.',
+      traits: ['3-inch sickle claw on the second toe of each foot', 'Body completely covered in feathers (proven by quill knobs on bones)', 'Brain-to-body ratio similar to modern birds', 'Hunted in coordinated packs using vocal calls'],
+      period: 'Late Cretaceous (75–71 million years ago)',
+      length: '6.8 ft (2 m) — most of it tail',
+      height: '1.6 ft at the hip',
+      weight: '33 lbs (15 kg)',
+      diet: 'Carnivore — small mammals, lizards, and juvenile dinosaurs',
+      fun_fact: 'A famous fossil shows a Velociraptor locked in mid-fight with a Protoceratops, both buried alive by a sand dune.' },
+    { name: 'Triceratops', icon: '🦏',
+      description: 'Three-horned tank-like herbivore with a 7-foot skull — one of the only dinosaurs known to have stood its ground against T-Rex.',
+      traits: ['Three forward-pointing horns up to 4 ft long', 'Bony neck frill possibly used for display and defense', 'Beak-like mouth shredded tough cycads and palms', 'Walked on four pillar-like legs'],
+      period: 'Late Cretaceous (68–66 million years ago)',
+      length: '30 ft (9 m)',
+      height: '10 ft at the shoulder',
+      weight: '12 tons (24,000 lbs)',
+      diet: 'Herbivore — tough plants, palms, ferns',
+      fun_fact: 'Skull alone could weigh up to 1 ton — one of the largest skulls of any land animal in history.' },
+    { name: 'Stegosaurus', icon: '🐲',
+      description: 'Plate-backed plant-eater with a brain the size of a walnut and a 4-foot-spiked tail called the thagomizer.',
+      traits: ['17 bony back plates that may have flushed with blood for display', 'Spiked tail (thagomizer) could swing at 50 mph', 'Brain only 80 grams in a 5-ton body', 'Walked slowly on four legs, hind legs longer than front'],
+      period: 'Late Jurassic (155–150 million years ago)',
+      length: '30 ft (9 m)',
+      height: '9 ft at the back plates',
+      weight: '5 tons (10,000 lbs)',
+      diet: 'Herbivore — low ferns, mosses, and cycads',
+      fun_fact: 'Fossil evidence shows Stegosaur tail spikes piercing Allosaurus bones — proof its tail really was used in combat.' },
+    { name: 'Brachiosaurus', icon: '🦕',
+      description: 'Towering long-necked giant that browsed treetops 40 feet up — its front legs were unusually longer than its back legs.',
+      traits: ['Stood 40 feet tall — taller than a 4-story building', 'Heart had to pump blood up a 30-foot neck', 'Nostrils on top of head, originally thought to be for snorkeling', 'Spoon-shaped teeth stripped leaves from high branches'],
+      period: 'Late Jurassic (154–153 million years ago)',
+      length: '85 ft (26 m)',
+      height: '40 ft (12 m) tall',
+      weight: '50 tons (100,000 lbs)',
+      diet: 'Herbivore — high tree foliage, ginkgoes, conifers',
+      fun_fact: 'Ate around 880 lbs of plants every single day to fuel its massive body.' },
+    { name: 'Pterodactyl', icon: '🪽',
+      description: 'Flying reptile (technically a pterosaur, not a dinosaur!) with leathery wings stretched between an extremely long fourth finger and the body.',
+      traits: ['Wingspan up to 35 ft in the largest species (Quetzalcoatlus)', 'Hollow, paper-thin bones for flight', 'Walked on all fours when grounded, like a bat', 'Some species had elaborate head crests for display'],
+      period: 'Late Jurassic to Late Cretaceous (150–66 million years ago)',
+      length: '3.5 ft body length (typical species)',
+      wingspan: '5 ft (small) to 35 ft (largest)',
+      weight: '2 lbs to 550 lbs depending on species',
+      diet: 'Carnivore — fish, insects, small vertebrates',
+      fun_fact: 'Largest pterosaurs were as tall as a giraffe when standing — and could still fly.' },
+    { name: 'Spinosaurus', icon: '🐊',
+      description: 'Largest predatory dinosaur ever discovered — semi-aquatic with a 7-foot sail on its back and crocodile-like jaws full of conical teeth.',
+      traits: ['Even larger than T-Rex (50 ft long)', 'Crocodile-like snout with pressure-sensing pits for catching fish', 'Dense bones acted like ballast for swimming', 'Paddle-like tail for underwater propulsion'],
+      period: 'Mid Cretaceous (99–93 million years ago)',
+      length: '50 ft (15 m)',
+      height: '12 ft at the sail\'s peak',
+      weight: '7–20 tons (estimates vary)',
+      diet: 'Piscivore/Carnivore — large fish, possibly small dinosaurs',
+      fun_fact: 'Only known dinosaur thought to have spent most of its life in water, like a giant prehistoric crocodile.' },
+    { name: 'Ankylosaurus', icon: '🛡️',
+      description: 'Living tank covered head-to-toe in interlocking bony armor, with a 100-pound bone club at the end of its tail.',
+      traits: ['Body sheathed in fused bony plates (osteoderms)', 'Tail club could shatter T-Rex shinbones', 'Even its eyelids were armored', 'Low-slung body made it nearly impossible to flip'],
+      period: 'Late Cretaceous (68–66 million years ago)',
+      length: '20–26 ft (6–8 m)',
+      height: '5.5 ft at the shoulder',
+      weight: '6 tons (12,000 lbs)',
+      diet: 'Herbivore — low-growing plants and ferns',
+      fun_fact: 'The tail club was so heavy it required massive tendons in the tail just to swing it.' },
+    { name: 'Allosaurus', icon: '🦴',
+      description: 'Fierce Jurassic apex predator with serrated teeth like steak knives and three powerful clawed fingers on each hand.',
+      traits: ['Skull built like a hatchet for slashing attacks', '70 serrated teeth, replaced continuously throughout life', 'Three-fingered hands with 6-inch curved claws', 'Possibly hunted in groups to take down sauropods'],
+      period: 'Late Jurassic (155–145 million years ago)',
+      length: '32 ft (9.7 m)',
+      height: '9 ft at the hip',
+      weight: '2.3 tons (4,600 lbs)',
+      diet: 'Carnivore — Stegosaurus, juvenile sauropods, Camptosaurus',
+      fun_fact: 'More Allosaurus skeletons have been found than any other large theropod — making it the best-known Jurassic predator.' },
+    { name: 'Diplodocus', icon: '🌿',
+      description: 'Long-necked giant whose 45-foot whip-tail could supposedly crack like a bullwhip at supersonic speeds.',
+      traits: ['90 feet long, mostly neck and tail', 'Whip-tail tip may have broken the sound barrier', 'Pencil-shaped teeth at the front of the mouth stripped leaves', 'Walked on four pillar-like legs, neck held mostly horizontal'],
+      period: 'Late Jurassic (154–152 million years ago)',
+      length: '90 ft (27 m)',
+      height: '16 ft at the hip',
+      weight: '15 tons (30,000 lbs)',
+      diet: 'Herbivore — ferns, ginkgoes, and conifer needles',
+      fun_fact: 'Despite being nearly 100 ft long, its head was only the size of a horse\'s — and its brain the size of a fist.' },
+    { name: 'Parasaurolophus', icon: '🎺',
+      description: 'Crested duck-billed dinosaur whose hollow 6-foot head crest produced low foghorn-like calls audible for miles.',
+      traits: ['Hollow tube-like head crest connected to nasal passages', 'Produced loud trumpet-like sounds for herd communication', 'Could walk on either two or four legs', 'Lived in large social herds'],
+      period: 'Late Cretaceous (76–73 million years ago)',
+      length: '31 ft (9.5 m)',
+      height: '8 ft at the hip',
+      weight: '2.5 tons (5,000 lbs)',
+      diet: 'Herbivore — leaves, twigs, pine needles ground by hundreds of teeth',
+      fun_fact: 'Scientists have built working models of the crest — it produces a deep B-flat note like a tuba.' },
+    { name: 'Iguanodon', icon: '👍',
+      description: 'Plant-eater with a defensive thumb spike and a beak — one of the very first dinosaurs ever named (1825).',
+      traits: ['Conical defensive spike on each thumb (originally mistaken for a nose horn!)', 'Could walk on two or four legs depending on activity', 'Hand-sized teeth ground tough vegetation', 'Lived in herds across Europe, Asia, and North America'],
+      period: 'Early Cretaceous (140–110 million years ago)',
+      length: '33 ft (10 m)',
+      height: '9 ft at the hip',
+      weight: '3.5 tons (7,000 lbs)',
+      diet: 'Herbivore — horsetails, conifers, cycads',
+      fun_fact: 'When first discovered, the thumb spike was placed on its nose like a rhino — it took 50 years to figure out the right spot.' }
+  ];
+
+  // ========== STATE ==========
+  let selectedAnimal = null;
+  let selectedDino = null;
+  let isLoading = false;
+
+  // ========== RENDER GRIDS ==========
+  function renderGrid(items, gridId, type) {
+    const grid = document.getElementById(gridId);
+    grid.innerHTML = '';
+    items.forEach((item) => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.dataset.name = item.name;
+      card.innerHTML = `<span class="card-icon">${item.icon}</span><div class="card-name">${item.name}</div>`;
+      card.addEventListener('click', () => selectCard(type, item, card));
+      grid.appendChild(card);
+    });
+  }
+
+  function selectCard(type, item, cardEl) {
+    const gridId = type === 'animal' ? 'animal-grid' : 'dino-grid';
+    const infoId = type === 'animal' ? 'animal-info' : 'dino-info';
+    const wasAlreadySelected = (type === 'animal' && selectedAnimal) || (type === 'dino' && selectedDino);
+    document.querySelectorAll(`#${gridId} .card`).forEach(c => c.classList.remove('selected'));
+    cardEl.classList.add('selected');
+    if (type === 'animal') selectedAnimal = item;
+    else selectedDino = item;
+    renderInfoPanel(infoId, item, type);
+    updateFuseButton();
+
+    // When an animal is picked, auto-advance to the dinosaur section so
+    // the next step is right in front of the user.
+    if (type === 'animal') {
+      // Wait a beat so the info panel finishes rendering before we scroll.
+      setTimeout(() => {
+        const dinoSection = document.getElementById('dino-grid').closest('section');
+        if (dinoSection) dinoSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 250);
+    }
+  }
+
+  function renderInfoPanel(panelId, item, type) {
+    const panel = document.getElementById(panelId);
+    panel.hidden = false;
+
+    // Build the meta facts list. Animals show habitat. Dinos show a richer
+    // set of fields (period, length, height/wingspan, weight, diet, fun fact)
+    // so each dinosaur feels distinct and informative.
+    let metaHTML = '';
+    if (type === 'animal') {
+      const rows = [
+        ['Length',  item.length_ft ? item.length_ft + ' ft' : null],
+        ['Weight',  item.weight_lbs ? (item.weight_lbs >= 2000 ? (item.weight_lbs/2000).toFixed(1) + ' tons' : item.weight_lbs.toLocaleString() + ' lbs') : null],
+        ['Diet',    item.diet ? item.diet.charAt(0).toUpperCase() + item.diet.slice(1) : null],
+        ['Habitat', item.habitat]
+      ].filter(r => r[1]);
+      metaHTML = '<div class="info-panel-facts">' +
+        rows.map(([k,v]) => `<div class="info-panel-fact"><span class="info-panel-fact-label">${k}</span><span class="info-panel-fact-value">${escapeHtml(v)}</span></div>`).join('') +
+        '</div>';
+    } else {
+      const rows = [
+        ['Era',     item.period],
+        ['Length',  item.length],
+        [item.wingspan ? 'Wingspan' : 'Height', item.wingspan || item.height],
+        ['Weight',  item.weight],
+        ['Diet',    item.diet]
+      ].filter(r => r[1]);
+      metaHTML = '<div class="info-panel-facts">' +
+        rows.map(([k,v]) => `<div class="info-panel-fact"><span class="info-panel-fact-label">${k}</span><span class="info-panel-fact-value">${escapeHtml(v)}</span></div>`).join('') +
+        '</div>';
+      if (item.fun_fact) {
+        metaHTML += `<div class="info-panel-funfact"><span class="info-panel-funfact-label">\u2728 Did you know?</span> ${escapeHtml(item.fun_fact)}</div>`;
+      }
+    }
+
+    panel.innerHTML = `
+      <div class="info-panel-icon">${item.icon}</div>
+      <div>
+        <div class="info-panel-name">${escapeHtml(item.name)}</div>
+        <p class="info-panel-desc">${escapeHtml(item.description)}</p>
+        <div class="info-panel-traits-title">Notable Traits</div>
+        <ul class="info-panel-traits">
+          ${item.traits.map(t => `<li class="info-panel-trait">${escapeHtml(t)}</li>`).join('')}
+        </ul>
+        ${metaHTML}
+      </div>
+    `;
+    panel.style.animation = 'none';
+    void panel.offsetHeight;
+    panel.style.animation = '';
+  }
+
+  function updateFuseButton() {
+    const btn = document.getElementById('fuse-btn');
+    const status = document.getElementById('fuse-status');
+    if (selectedAnimal && selectedDino && !isLoading) {
+      btn.disabled = false;
+      status.innerHTML = `<span class="ready">✓ READY · ${selectedAnimal.name} + ${selectedDino.name}</span>`;
+    } else if (isLoading) {
+      btn.disabled = true;
+      status.textContent = 'Fusing genetic material...';
+    } else {
+      btn.disabled = true;
+      const need = [];
+      if (!selectedAnimal) need.push('an animal');
+      if (!selectedDino) need.push('a dinosaur');
+      status.textContent = `Select ${need.join(' and ')} to begin`;
+    }
+  }
+
+  // ========== HYBRID GENERATION ==========
+  async function generateHybrid() {
+    if (!selectedAnimal || !selectedDino) return;
+    isLoading = true;
+    updateFuseButton();
+    showLoading();
+
+    try {
+      const response = await fetch('/api/hybrid', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          animal: selectedAnimal.name,
+          dinosaur: selectedDino.name
+        })
+      });
+
+      if (!response.ok) throw new Error(`Backend returned ${response.status}`);
+
+      const hybrid = await response.json();
+      showResult(hybrid);
+    } catch (err) {
+      console.warn('Backend unreachable, using offline fallback:', err);
+      showResult(generateFallback());
+    } finally {
+      isLoading = false;
+      updateFuseButton();
+    }
+  }
+
+  // Build a hybrid name that's always derived from BOTH parents AND
+  // varies every time the user clicks. We pick one of several blending
+  // strategies at random and combine syllables from each parent name with
+  // pseudo-Latin/Greek scientific embellishments. The name should feel
+  // related to the combination, not random — but should rarely repeat.
+  function buildHybridName(animalName, dinoName) {
+    // Clean the raw parent names: lowercase, letters only, drop "saurus" /
+    // "raptor" tails so the chunks we slice are the *distinctive* parts.
+    const clean = s => s.toLowerCase().replace(/[^a-z]/g, '');
+    const stripDinoTail = s => s
+      .replace(/saurus$/, '').replace(/odon$/, '').replace(/raptor$/, '')
+      .replace(/lophus$/, '').replace(/ceratops$/, '');
+    let aRaw = clean(animalName);
+    let dRaw = stripDinoTail(clean(dinoName));
+    if (dRaw.length < 3) dRaw = clean(dinoName); // don't strip everything away
+
+    const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+    const cap = s => s ? s[0].toUpperCase() + s.slice(1) : '';
+
+    const aHead = aRaw.slice(0, Math.max(2, Math.ceil(aRaw.length / 2)));
+    const aTail = aRaw.slice(Math.max(1, Math.floor(aRaw.length / 2)));
+    const dHead = dRaw.slice(0, Math.max(2, Math.ceil(dRaw.length / 2)));
+    const dTail = dRaw.slice(Math.max(1, Math.floor(dRaw.length / 2)));
+
+    // Scientific-flavored embellishments
+    const sciPrefixes  = ['Crypto', 'Neo', 'Para', 'Mega', 'Proto', 'Pseudo', 'Xeno', 'Archaeo', 'Eu', 'Therio'];
+    const sciSuffixes  = ['us', 'ax', 'or', 'yx', 'on', 'is', 'es', 'ium', 'ax', 'odon', 'ornis', 'oraxis'];
+    const linkVowels   = ['o', 'a', 'i', 'ae', 'eo', 'oa'];
+    const epithets     = ['rex', 'magnus', 'ferox', 'maximus', 'horribilis', 'ultima', 'noctis', 'tyrannus'];
+
+    // Six different blending strategies — picking one keeps results varied.
+    const strategy = Math.floor(Math.random() * 6);
+    let name;
+    switch (strategy) {
+      case 0:
+        // Animal head + linking vowel + dino tail + sci suffix
+        name = cap(aHead) + pick(linkVowels) + dTail + pick(sciSuffixes);
+        break;
+      case 1:
+        // Sci prefix + dino head + animal tail
+        name = pick(sciPrefixes) + dHead + aTail;
+        break;
+      case 2:
+        // Dino head + animal head + sci suffix
+        name = cap(dHead) + aHead + pick(sciSuffixes);
+        break;
+      case 3:
+        // Animal head + dino head + epithet (two-word legendary style)
+        name = cap(aHead) + dHead + ' ' + cap(pick(epithets));
+        break;
+      case 4:
+        // Reversed dino + animal head + sci suffix (more invented sound)
+        name = cap(dTail.split('').reverse().join('')) + aHead + pick(sciSuffixes);
+        break;
+      case 5:
+        // Sci prefix + animal head + dino tail
+        name = pick(sciPrefixes) + aHead + dTail;
+        break;
+    }
+
+    // Tidy up: collapse triple letters, ensure it doesn't end in a vowel cluster
+    name = name.replace(/(.)\1\1+/g, '$1$1');
+    return name;
+  }
+
+  // Offline fallback — used if the backend isn't reachable. Stats are
+  // now computed from the actual parent species so that, e.g., an
+  // Eagle + Stegosaurus weighs MUCH more than an Eagle + Velociraptor.
+  function generateFallback() {
+    const a = selectedAnimal;
+    const d = selectedDino;
+    const name = buildHybridName(a.name, d.name);
+
+    // ---- DINO numeric extraction ----
+    // The dino stats live as strings ("9 tons", "40 ft"). Pull the first
+    // number out for math. Convert tons -> lbs where needed.
+    const parseFt = s => {
+      const m = String(s || '').match(/([0-9.]+)/);
+      return m ? parseFloat(m[1]) : 10;
+    };
+    const parseLbs = s => {
+      const str = String(s || '').toLowerCase();
+      const m = str.match(/([0-9,.]+)/);
+      if (!m) return 1000;
+      const n = parseFloat(m[1].replace(/,/g, ''));
+      if (str.includes('ton')) return n * 2000;
+      return n;
+    };
+
+    const dLenFt = parseFt(d.length);
+    const dWtLbs = parseLbs(d.weight);
+    const aLenFt = a.length_ft || 6;
+    const aWtLbs = a.weight_lbs || 100;
+
+    // ---- Hybrid size: weighted blend, leaning slightly toward the larger parent ----
+    // Using a 60/40 lean toward the dinosaur since dinos are typically the
+    // dominant size driver, then nudged by the animal so an Eagle parent
+    // makes the hybrid leaner than an Elephant parent would.
+    const blendLen = dLenFt * 0.6 + aLenFt * 0.4;
+    const blendWt  = dWtLbs * 0.6 + aWtLbs * 0.4;
+
+    const sizeStr = blendLen >= 30
+      ? `${Math.round(blendLen)} ft long — towering frame`
+      : blendLen >= 12
+      ? `${Math.round(blendLen)} ft long, roughly ${Math.round(blendLen * 0.4)} ft tall`
+      : `${blendLen.toFixed(1)} ft long — agile build`;
+
+    const weightStr = blendWt >= 4000
+      ? `${(blendWt / 2000).toFixed(1)} tons`
+      : blendWt >= 200
+      ? `${Math.round(blendWt).toLocaleString()} lbs`
+      : `${Math.round(blendWt)} lbs — compact and quick`;
+
+    // ---- Diet: combine both parents' food preferences ----
+    const aDiet = (a.diet || 'carnivore').toLowerCase();
+    const dDiet = (d.diet || '').toLowerCase();
+    const dIsCarn = dDiet.includes('carn') || dDiet.includes('pisc');
+    const dIsHerb = dDiet.includes('herb');
+    const aIsCarn = aDiet.includes('carn');
+    const aIsHerb = aDiet.includes('herb');
+    const aIsOmni = aDiet.includes('omni');
+    let dietStr;
+    if ((aIsCarn || aIsOmni) && dIsCarn) dietStr = 'Apex carnivore — hunts large prey';
+    else if (aIsHerb && dIsHerb)         dietStr = 'Massive herbivore — strips entire trees';
+    else if (aIsOmni || (aIsCarn && dIsHerb) || (aIsHerb && dIsCarn))
+                                          dietStr = 'Opportunistic omnivore — eats almost anything';
+    else if (aIsCarn || dIsCarn)         dietStr = 'Predator — pursues prey to half its own size';
+    else                                  dietStr = 'Browser — favors leaves, fruit, and roots';
+
+    // ---- Danger: scale by combined mass + carnivore-ness ----
+    let dangerScore = 0;
+    if (aIsCarn) dangerScore += 2;
+    if (dIsCarn) dangerScore += 2;
+    if (aIsOmni) dangerScore += 1;
+    if (blendWt > 10000) dangerScore += 3;
+    else if (blendWt > 2000) dangerScore += 2;
+    else if (blendWt > 200)  dangerScore += 1;
+    const dangerStr = dangerScore >= 6 ? 'Class V — Apex Threat'
+                    : dangerScore >= 4 ? 'Class IV — Highly Dangerous'
+                    : dangerScore >= 2 ? 'Class III — Approach With Caution'
+                    : dangerScore >= 1 ? 'Class II — Mildly Aggressive'
+                    : 'Class I — Surprisingly Docile';
+
+    // ---- Habitat blend ----
+    const habitatStr = `Hybrid biome — at home in ${a.habitat.toLowerCase()} but can survive in ${(d.period || '').toLowerCase().includes('jurassic') ? 'humid lowland forests' : 'open prehistoric plains'}.`;
+
+    // ---- Behavior: lean on parent diets ----
+    let behaviorStr;
+    if (aIsCarn && dIsCarn) {
+      behaviorStr = `Hunts using the ${a.name.toLowerCase()}'s tactical instincts amplified by the ${d.name.toLowerCase()}'s raw power. Prefers to ambush, then overwhelm. Highly territorial.`;
+    } else if (aIsHerb && dIsHerb) {
+      behaviorStr = `Spends most of its time grazing in small herds. Surprisingly intelligent and uses the ${a.name.toLowerCase()}'s social behaviors to coordinate movement. Defensive when threatened.`;
+    } else {
+      behaviorStr = `Adaptive and opportunistic. Combines the ${a.name.toLowerCase()}'s cunning with the ${d.name.toLowerCase()}'s prehistoric resilience. Difficult to track and unpredictable in encounters.`;
+    }
+
+    return {
+      name: name,
+      scientific_name: `Hybridis ${a.name.toLowerCase()}${d.name.toLowerCase().replace(/[^a-z]/g, '')}`,
+      description: `A formidable hybrid combining the ${a.description.toLowerCase().replace(/\.$/, '')} with the prehistoric power of a ${d.name.toLowerCase()}. ${d.description} The fusion produces a creature with bewildering anatomy and behaviors that defy conventional classification.`,
+      size: sizeStr,
+      weight: weightStr,
+      diet: dietStr,
+      habitat: habitatStr,
+      behavior: behaviorStr,
+      traits: [
+        { icon: '⚡', name: 'HYBRID VIGOR', detail: `Inherits the ${a.traits[0].toLowerCase()} of its modern parent and the ${(d.traits[0] || 'raw power').toLowerCase()} of its prehistoric one.` },
+        { icon: '🦴', name: 'ANCIENT FRAME', detail: `Skeleton scaled to a ${Math.round(blendLen)}-foot frame, reinforced with prehistoric bone density.` },
+        { icon: '🌟', name: 'ADAPTIVE INSTINCT', detail: `Quickly adjusts strategy in response to new threats, drawing on both parent species' survival behaviors.` }
+      ],
+      weakness: aWtLbs < 50
+        ? 'Inherits the modern parent\'s fragile bone structure — vulnerable to direct strikes despite its size.'
+        : 'Genetic instability flares under prolonged stress, slowing reflexes for several hours.',
+      discovery_lore: `First reported by field researchers tracking unusual ${a.habitat.split(',')[0].toLowerCase()} disturbances. The specimen was photographed at dusk and has not been seen since.`,
+      danger_level: dangerStr
+    };
+  }
+
+  // ========== UI: LOADING + RESULT ==========
+  function showLoading() {
+    const zone = document.getElementById('result-zone');
+    zone.innerHTML = `
+      <div class="loading">
+        <div class="loading-bolt">⚡</div>
+        <div class="loading-text">Fusing DNA</div>
+        <div class="loading-substep">// Sequencing chromosomes · Calibrating reactor</div>
+      </div>
+    `;
+    zone.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function showResult(h) {
+    const zone = document.getElementById('result-zone');
+    const traitsHTML = (h.traits || []).map(t => `
+      <li class="trait">
+        <span class="trait-icon">${t.icon || '✦'}</span>
+        <div>
+          <strong style="font-family: 'Bungee', sans-serif; font-size: 14px; letter-spacing: 0.05em; color: var(--glow-acid); display: block; margin-bottom: 4px;">${escapeHtml(t.name)}</strong>
+          <span>${escapeHtml(t.detail)}</span>
+        </div>
+      </li>
+    `).join('');
+
+    zone.innerHTML = `
+      <div class="result-card">
+        <div class="corner-mark tl"></div>
+        <div class="corner-mark tr"></div>
+        <div class="corner-mark bl"></div>
+        <div class="corner-mark br"></div>
+
+        <div class="result-label">★ Specimen #${Math.floor(Math.random() * 9000 + 1000)} · Classification Pending</div>
+        <h2 class="result-name">${escapeHtml(h.name)}</h2>
+        ${h.scientific_name ? `<div class="result-scientific">${escapeHtml(h.scientific_name)}</div>` : ''}
+
+        <div class="result-parents">
+          <span class="parent-chip"><span class="icon">${selectedAnimal.icon}</span> ${selectedAnimal.name}</span>
+          <span class="parents-plus">+</span>
+          <span class="parent-chip"><span class="icon">${selectedDino.icon}</span> ${selectedDino.name}</span>
+        </div>
+
+        <p class="result-description">${escapeHtml(h.description)}</p>
+
+        <div class="result-stats-row">
+          ${h.size ? `<div class="stat"><span class="stat-label">Size</span><span class="stat-value">${escapeHtml(h.size)}</span></div>` : ''}
+          ${h.weight ? `<div class="stat"><span class="stat-label">Weight</span><span class="stat-value">${escapeHtml(h.weight)}</span></div>` : ''}
+          ${h.diet ? `<div class="stat"><span class="stat-label">Diet</span><span class="stat-value">${escapeHtml(h.diet)}</span></div>` : ''}
+          ${h.danger_level ? `<div class="stat"><span class="stat-label">Danger</span><span class="stat-value" style="color: var(--glow-magenta);">${escapeHtml(h.danger_level)}</span></div>` : ''}
+        </div>
+
+        ${h.habitat ? `
+          <div class="result-section">
+            <div class="result-section-title cyan">🌍 Habitat</div>
+            <div class="result-section-body">${escapeHtml(h.habitat)}</div>
+          </div>
+        ` : ''}
+
+        ${h.behavior ? `
+          <div class="result-section">
+            <div class="result-section-title magenta">🧠 Behavior</div>
+            <div class="result-section-body">${escapeHtml(h.behavior)}</div>
+          </div>
+        ` : ''}
+
+        <div class="result-section">
+          <div class="result-section-title acid">⚡ Special Traits</div>
+          <ul class="traits-list">${traitsHTML}</ul>
+        </div>
+
+        ${h.weakness ? `
+          <div class="result-section">
+            <div class="result-section-title amber">⚠️ Known Weakness</div>
+            <div class="weakness-box">${escapeHtml(h.weakness)}</div>
+          </div>
+        ` : ''}
+
+        ${h.discovery_lore ? `
+          <div class="result-section">
+            <div class="result-section-title cyan">📖 First Observed</div>
+            <div class="lore-box">${escapeHtml(h.discovery_lore)}</div>
+          </div>
+        ` : ''}
+
+        <button class="reset-btn" onclick="resetAll()">↻ Create Another</button>
+      </div>
+    `;
+    setTimeout(() => zone.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+  }
+
+  function escapeHtml(str) {
+    if (typeof str !== 'string') return '';
+    return str.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  }
+
+  function resetAll() {
+    selectedAnimal = null;
+    selectedDino = null;
+    document.querySelectorAll('.card.selected').forEach(c => c.classList.remove('selected'));
+    document.getElementById('animal-info').hidden = true;
+    document.getElementById('dino-info').hidden = true;
+    document.getElementById('result-zone').innerHTML = '';
+    updateFuseButton();
+    document.querySelector('header').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  renderGrid(ANIMALS, 'animal-grid', 'animal');
+  renderGrid(DINOS, 'dino-grid', 'dino');
+  document.getElementById('fuse-btn').addEventListener('click', generateHybrid);
+</script>
+</body>
+</html>
